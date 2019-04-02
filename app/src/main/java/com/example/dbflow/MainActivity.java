@@ -25,10 +25,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.saveMe:
-                Organization organization = new Organization();
-                organization.setName(mainBinding.mainName.getText().toString());
-                organization.setCountry(mainBinding.mainCountry.getText().toString());
-                organization.save();
+                LaunchImages lImage = new LaunchImages();
+                lImage.setLunchesBigImageUrl("ImgSmlUrl");
+                lImage.setLunchesSmallImageUrl("ImgBigUrl");
+                lImage.save();
+                Launches launches = new Launches();
+                launches.setLunchesFlightNumber(1);
+                launches.setLunchesMissionName("Ashim");
+                launches.setLaunchImages(lImage);
+                launches.save();
                 break;
 
             case R.id.showDetail:    showData(); break;
@@ -36,13 +41,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showData() {
-        List<Organization> organizations = SQLite.select().from(Organization.class).queryList();
-
-        for(Organization organization : organizations){
+        List<Launches> launches = SQLite.select().from(Launches.class).queryList();
+        mainBinding.dataText.setText("");
+        for(Launches launche : launches){
             String content = "";
-            content += "ID" + organization.getId() + "\n";
-            content += "Name" + organization.getCountry() + "\n";
-            content += "Country" + organization.getName() + "\n";
+            content += "ID" + launche.getId() + "\n";
+            content += "flight Num" + launche.getLunchesFlightNumber() + "\n";
+            content += "Flight name" + launche.getLunchesMissionName() + "\n";
+            content += "small url" + launche.getLaunchImages().getLunchesSmallImageUrl() + "\n";
+            content += "Big url" + launche.getLaunchImages().getLunchesBigImageUrl() + "\n";
             mainBinding.dataText.append(content);
         }
     }
